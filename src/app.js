@@ -5,18 +5,13 @@ const app = express()
 app.use(cors())
 app.use(express.json())
 
-let usuarios = [
-    {
-        username: 'bobesponja',
-        avatar: "https://cdn.shopify.com/s/files/1/0150/0643/3380/files/Screen_Shot_2019-07-01_at_11.35.42_AM_370x230@2x.png"
-    }
-]
-let tweets = [
-    {
-        username: "bobesponja",
-        tweet: "Eu amo hambúrguer de siri!"
-    }
-]
+let usuarios = []
+let tweets = []
+
+app.get("/tweets", (req, res) => {
+    res.send(tweets)
+})
+
 
 app.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body
@@ -30,7 +25,7 @@ app.post("/sign-up", (req, res) => {
 
 app.post("/tweets", (req, res) => {
     const { username, tweet } = req.body
-    const existeUser = tweets.find(user => user.username === username)
+    const existeUser = tweets.some((user) => user.username === username)
     if (!username || !tweet) {
         return res.status(400)
     }
@@ -41,9 +36,6 @@ app.post("/tweets", (req, res) => {
     res.status(201).send("OK/CREATED")
 })
 
-app.get("/tweets", (req, res) => {
-    res.send(tweets)
-})
 
 
 const PORT = 5000
