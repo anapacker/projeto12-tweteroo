@@ -9,9 +9,16 @@ let usuarios = []
 let tweets = []
 
 app.get("/tweets", (req, res) => {
-    res.send(tweets)
+    let ultimosDezTweets = []
+    for (let i = 0; i < 10; i++) {
+        const posicaoASerAcessada = tweets.length - 1 - i
+        if (posicaoASerAcessada < 0) {
+            break
+        }
+        ultimosDezTweets.push(tweets[posicaoASerAcessada])
+    }
+    res.send(ultimosDezTweets)
 })
-
 
 app.post("/sign-up", (req, res) => {
     const { username, avatar } = req.body
@@ -24,10 +31,12 @@ app.post("/sign-up", (req, res) => {
 })
 
 app.post("/tweets", (req, res) => {
-    const { username, tweet } = req.body
-    const existeUser = tweets.some((user) => user.username === username)
+    const username = req.body.username
+    const tweet = req.body.tweet
+    //const {username, tweet} = req.body
+    const existeUser = usuarios.some((user) => user.username === username)
     if (!username || !tweet) {
-        return res.status(400)
+        return res.status(422)
     }
     if (!existeUser) {
         return res.status(401).send("UNAUTHORIZED")
