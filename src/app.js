@@ -41,7 +41,10 @@ app.post("/tweets", (req, res) => {
     if (!existeUser) {
         return res.status(401).send("UNAUTHORIZED")
     }
-    tweets.push({ username, tweet })
+    const objeto = usuarios.find(usuario => usuario.username === username)
+    const { avatar } = objeto
+
+    tweets.push({ username, tweet, avatar })
     res.status(201).send("OK/CREATED")
 })
 
